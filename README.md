@@ -13,7 +13,16 @@ Program to make a LoRaWAN node based on the TTGO LoRa 915MHz plus GPS (ATGM336H)
 ### Images
 
 <img src="img/hardware-ttgo.jpg" alt="ttgo" width="50%"><img src="img/hardware-gps.jpg" alt="gps" width="50%">
-<img src="img/hardware-ttn.jpg" alt="ttn" width="50%">
+<img src="img/hardware-ttn.jpg" alt="ttn" width="50%"><img src="img/hardware-ttn-box.jpg" alt="ttn" width="50%">
+
+### Schematic
+
+| ESP32 | GPS |
+| :----: | :-----: |
+| 5V | VCC |
+| GND | GND |
+| 34 | TX |
+| 33 | RX |
 
 ## Librarys
 
@@ -27,7 +36,7 @@ Program to make a LoRaWAN node based on the TTGO LoRa 915MHz plus GPS (ATGM336H)
 
 First it's a good idea to create a new application, them go on Payload Formats and put the code below.
 
-<img src="img/ttn-payload.png" alt="payload" width="75%">
+<img src="img/ttn-payload.png" alt="payload" width="100%">
 
 ```java
 function Decoder(bytes, port) {
@@ -56,7 +65,7 @@ function Decoder(bytes, port) {
 
 Next go on integration and add a integration TNN Mapper. (It's a good idea to add a experiment name)
 
-<img src="img/ttn-integration.png" alt="integration" width="75%">
+<img src="img/ttn-integration.png" alt="integration" width="100%">
 
 With the experiment name is possible to check only the experiment [ttn_criciuma](https://ttnmapper.org/experiments/map.php?name=ttn_criciuma).
 More information on the [TTN Mapper Documentation](https://www.thethingsnetwork.org/docs/applications/ttnmapper/).
@@ -65,15 +74,17 @@ More information on the [TTN Mapper Documentation](https://www.thethingsnetwork.
 
 Create a new device and goes to setting, change the Activation Method to ABP and disable the Frame Counter Check, them save.
 
-<img src="img/ttn-node-abp.png" alt="abp" width="75%">
+<img src="img/ttn-node-abp.png" alt="abp" width="100%">
 
 Next goes to Overview on the bottow Example Code.
 
-<img src="img/ttn-node.png" alt="node" width="75%">
+<img src="img/ttn-node.png" alt="node" width="100%">
 
 Copy the code and replace on the sample code (esp32-ttnmapper-gps.ino).
 
+If your board is diferent from the `Heltec Wifi LoRa 32` you should check the pins connection on `lmic_pins`.
+
 ----
 
-Do you like this library? Please [star this project on GitHub](stargazers)!
+Do you like this? Please [star this project on GitHub](https://github.com/ricaun/esp32-ttnmapper-gps/stargazers)!
 
