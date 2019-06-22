@@ -5,7 +5,7 @@ Program to make a LoRaWAN node based on the TTGO LoRa 915MHz plus GPS (ATGM336H)
 [![travis](https://travis-ci.org/ricaun/esp32-ttnmapper-gps.svg)](https://travis-ci.org/ricaun/esp32-ttnmapper-gps)
 [![license](https://img.shields.io/github/license/ricaun/esp32-ttnmapper-gps.svg)](LICENSE)
 
-<img src="img/ttn.jpg" alt="ttn" width="75%">
+<img src="img/ttn.jpg" alt="ttn" width="100%">
 
 ## Hardware
 
