@@ -5,6 +5,8 @@ Program to make a LoRaWAN node based on the TTGO LoRa 915MHz plus GPS (ATGM336H)
 [![travis](https://travis-ci.org/ricaun/esp32-ttnmapper-gps.svg)](https://travis-ci.org/ricaun/esp32-ttnmapper-gps)
 [![license](https://img.shields.io/github/license/ricaun/esp32-ttnmapper-gps.svg)](LICENSE)
 
+<img src="img/ttn.jpg" alt="ttn" width="75%">
+
 ## Hardware
 
 * TTGO LORA32 915Mhz (Heltec Wifi LoRa 32)
@@ -67,7 +69,7 @@ Next go on integration and add a integration TNN Mapper. (It's a good idea to ad
 
 <img src="img/ttn-integration.png" alt="integration" width="100%">
 
-With the experiment name is possible to check only the experiment [ttn_criciuma](https://ttnmapper.org/experiments/map.php?name=ttn_criciuma).
+With the experiment name is possible to check only the experiment [criciuma](https://ttnmapper.org/experiments/map.php?name=criciuma).
 More information on the [TTN Mapper Documentation](https://www.thethingsnetwork.org/docs/applications/ttnmapper/).
 
 ### Node
