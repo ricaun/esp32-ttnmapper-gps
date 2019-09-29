@@ -19,7 +19,7 @@ const char *appSKey = "00000000000000000000000000000000";
 #include <hal/hal.h>
 #include <SPI.h>
 
-#define SEND_TIMER 10
+#define SEND_TIMER 82
 
 #define LORA_HTOI(c) ((c<='9')?(c-'0'):((c<='F')?(c-'A'+10):((c<='f')?(c-'a'+10):(0))))
 #define LORA_TWO_HTOI(h, l) ((LORA_HTOI(h) << 4) + LORA_HTOI(l))
@@ -91,10 +91,6 @@ void onEvent (ev_t ev) {
       break;
     case EV_JOINED:
       Serial.println(F("EV_JOINED"));
-
-      // Disable link check validation (automatically enabled
-      // during join, but not supported by TTN at this time).
-      LMIC_setLinkCheckMode(0);
       break;
     case EV_RFU1:
       Serial.println(F("EV_RFU1"));
@@ -159,7 +155,6 @@ void setup() {
   LMIC_setClockError(MAX_CLOCK_ERROR * 10 / 100);
 
   #if defined(CFG_eu868)
-
   LMIC_setupChannel(0, 868100000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
   LMIC_setupChannel(1, 868300000, DR_RANGE_MAP(DR_SF12, DR_SF7B), BAND_CENTI);      // g-band
   LMIC_setupChannel(2, 868500000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
@@ -173,9 +168,15 @@ void setup() {
   LMIC_selectSubBand(1);
   #endif
 
-  LMIC.dn2Dr = DR_SF9;
+  // Disable link check validation
+  LMIC_setLinkCheckMode(0);
   
-
+  // TTN uses SF9 for its RX2 window.
+  LMIC.dn2Dr = DR_SF9;
+    
+  // Set data rate and transmit power for uplink
+  LMIC_setDrTxpow(DR_SF7,14);
+  
   do_send(&sendjob);
 }
 
