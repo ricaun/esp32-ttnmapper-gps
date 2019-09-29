@@ -60,9 +60,9 @@ String gps_location()
   if (gps.location.isValid())
   {
     String str = "";
-    str += gps_latitude();
+    str += String(gps_latitude(), 4);
     str += " ";
-    str += gps_longitude();
+    str += String(gps_longitude(), 4);
     return str;
   }
   else
