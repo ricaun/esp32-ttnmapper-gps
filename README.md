@@ -24,7 +24,7 @@ Program to make a LoRaWAN node based on the TTGO LoRa 915MHz plus GPS (ATGM336H)
 | 5V | VCC |
 | GND | GND |
 | 34 | TX |
-| 33 | RX |
+| 35 | RX |
 
 ## Librarys
 
