@@ -11,10 +11,6 @@
 #define OLED_RUNEVERY 500
 #define OLED_TIMEOUT 4
 
-#define OLED_SDA 4
-#define OLED_SCL 15
-#define OLED_ADDR 0x3C
-#define OLED_RST 16
 
 SSD1306 display(OLED_ADDR, OLED_SDA, OLED_SCL);// i2c ADDR & SDA, SCL on wemos
 
