@@ -32,6 +32,22 @@ Program to make a LoRaWAN node based on the TTGO LoRa 915MHz plus GPS (ATGM336H)
 * [ThingPulse OLED SSD1306](https://github.com/ThingPulse/esp8266-oled-ssd1306)
 * [TinyGPSPlus](https://github.com/mikalhart/TinyGPSPlus)
 
+## PlatformIO
+
+[PlatformIO](https://platformio.org) allows building esp32-ttnmapper-gps for several board targets. Currently
+tested:
+
+  * heltec_wifi_lora_32
+  * heltec_wifi_lora_32_V2
+
+### Building
+
+```pio run -e heltec_wifi_lora_32```
+
+### Uploading
+
+```pio run -e heltec_wifi_lora_32 -t upload```
+
 ## The Things Network
 
 ### Application Configuration

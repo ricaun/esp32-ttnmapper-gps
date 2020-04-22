@@ -32,10 +32,10 @@ static uint8_t APPSKEY[16];
 
 // Pin mapping
 const lmic_pinmap lmic_pins = {
-  .nss = 18, 
+  .nss = LORA_NSS,
   .rxtx = LMIC_UNUSED_PIN,
-  .rst = 14,
-  .dio = {/*dio0*/ 26, /*dio1*/ 33, /*dio2*/ 32}
+  .rst = LORA_RST,
+  .dio = {LORA_DIO0, LORA_DIO1, LORA_DIO2}
 };
 
 void os_getArtEui (u1_t* buf) { }
