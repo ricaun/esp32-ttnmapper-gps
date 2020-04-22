@@ -33,17 +33,10 @@ static uint8_t APPSKEY[16];
 // Pin mapping
 #if defined(V1)
 const lmic_pinmap lmic_pins = {
-<<<<<<< HEAD:esp32-ttnmapper-gps/esp32-ttnmapper-gps.ino
-    .nss = 18,
-    .rxtx = LMIC_UNUSED_PIN,
-    .rst = 14,
-    .dio = {26, 33, 32},
-=======
   .nss = LORA_NSS,
   .rxtx = LMIC_UNUSED_PIN,
   .rst = LORA_RST,
   .dio = {LORA_DIO0, LORA_DIO1, LORA_DIO2}
->>>>>>> kallisti5/platformio:src/esp32-ttnmapper-gps.ino
 };
 #elif defined(V2)
 const lmic_pinmap lmic_pins = {
@@ -67,7 +60,7 @@ void onEvent (ev_t ev) {
     case EV_TXCOMPLETE:
       oled_status(" --- TXCOMPLETE --- ");
       Serial.println(F("EV_TXCOMPLETE (includes waiting for RX windows)"));
-      if (LMIC.txrxFlags & TXRX_ACK) 
+      if (LMIC.txrxFlags & TXRX_ACK)
       {
         Serial.println(F("Received ack"));
       }
@@ -143,15 +136,15 @@ void do_send(osjob_t* j) {
 void setup() {
   Serial.begin(115200);
   Serial.println(F("Starting"));
-  
+
   oled_setup();
   gps_setup();
   button_setup();
-  
+
   LORA_HEX_TO_BYTE(DEVADDR, devAddr, 4);
   LORA_HEX_TO_BYTE(NWKSKEY, nwkSKey, 16);
   LORA_HEX_TO_BYTE(APPSKEY, appSKey, 16);
-  
+
   if (LORA_DEVADDR(DEVADDR) == 0) while(true);
 
   os_init();
@@ -177,13 +170,13 @@ void setup() {
 
   // Disable link check validation
   LMIC_setLinkCheckMode(0);
-  
+
   // TTN uses SF9 for its RX2 window.
   LMIC.dn2Dr = DR_SF9;
-    
+
   // Set data rate and transmit power for uplink
   LMIC_setDrTxpow(DR_SF7,14);
-  
+
   do_send(&sendjob);
 }
 
@@ -194,7 +187,7 @@ void loop() {
   if (button_loop())
   {
     oled_mode(button_mode());
-    
+
     if (button_count() == 0)
       do_send(&sendjob);
     else if (button_count() == 2)
@@ -209,7 +202,7 @@ void message(const uint8_t *payload, size_t size, uint8_t port)
 {
   Serial.println("-- MESSAGE");
   Serial.println("Received " + String(size) + " bytes on port " + String(port) + ":");
-  if (port == 0) 
+  if (port == 0)
   {
     oled_status(" --- TX_CONFIRMED --- ");
     return;
