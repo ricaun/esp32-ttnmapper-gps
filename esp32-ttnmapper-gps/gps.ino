@@ -8,39 +8,39 @@
 
 
 #include <TinyGPS++.h>
-#include <HardwareSerial.h> 
+#include <SoftwareSerial.h>
 
-#define RXPin 34
-#define TXPin 35
+#define RXPin 2
+#define TXPin 17
 #define GPSBaud 9600
 
 TinyGPSPlus gps;
-HardwareSerial ss(1);
+SoftwareSerial ss;
 
-void gps_setup(){
-  ss.begin(GPSBaud, SERIAL_8N1, RXPin, TXPin);
+void gps_setup() {
+  ss.begin(GPSBaud, RXPin, TXPin);
   Serial.print(F("TinyGPS++ library v. ")); Serial.println(TinyGPSPlus::libraryVersion());
   Serial.println();
 }
 
-void gps_loop(){
+void gps_loop() {
   while (ss.available() > 0) {
     gps.encode(ss.read());
   }
-  if (runEvery_gps(5000)) 
+  if (runEvery_gps(5000))
   {
     Serial.println(gps_time() + " " + gps_date());
   }
 }
 
-boolean gps_read(){
+boolean gps_read() {
   return (gps.location.isValid());
 }
 
-float gps_latitude(){
+float gps_latitude() {
   return gps.location.lat();
 }
-float gps_longitude(){
+float gps_longitude() {
   return gps.location.lng();
 }
 
@@ -48,7 +48,7 @@ float gps_meters() {
   return gps.altitude.meters();
 }
 
-float gps_HDOP(){
+float gps_HDOP() {
   if (gps.hdop.isValid())
     return gps.hdop.hdop();
   else
@@ -60,15 +60,15 @@ String gps_location()
   if (gps.location.isValid())
   {
     String str = "";
-    str += gps_latitude();
+    str += String(gps_latitude(), 4);
     str += " ";
-    str += gps_longitude();
+    str += String(gps_longitude(), 4);
     return str;
   }
   else
   {
     return "#### ####";
-  }  
+  }
 }
 
 String gps_date()
@@ -91,7 +91,7 @@ String gps_date()
   else
   {
     return "xx/xx/xxxx";
-  }  
+  }
 }
 
 String gps_time()
@@ -115,7 +115,7 @@ String gps_time()
   else
   {
     return "xx:xx:xx";
-  }  
+  }
 }
 
 boolean runEvery_gps(unsigned long interval)
@@ -133,7 +133,7 @@ boolean runEvery_gps(unsigned long interval)
 
 void displayInfo()
 {
-  Serial.print(F("Location: ")); 
+  Serial.print(F("Location: "));
   if (gps.location.isValid())
   {
     Serial.print(gps.location.lat(), 6);

@@ -19,7 +19,7 @@ const char *appSKey = "00000000000000000000000000000000";
 #include <hal/hal.h>
 #include <SPI.h>
 
-#define SEND_TIMER 10
+#define SEND_TIMER 82
 
 #define LORA_HTOI(c) ((c<='9')?(c-'0'):((c<='F')?(c-'A'+10):((c<='f')?(c-'a'+10):(0))))
 #define LORA_TWO_HTOI(h, l) ((LORA_HTOI(h) << 4) + LORA_HTOI(l))
@@ -31,12 +31,21 @@ static uint8_t NWKSKEY[16];
 static uint8_t APPSKEY[16];
 
 // Pin mapping
+#if defined(V1)
 const lmic_pinmap lmic_pins = {
-  .nss = 18, 
-  .rxtx = LMIC_UNUSED_PIN,
-  .rst = 14,
-  .dio = {/*dio0*/ 26, /*dio1*/ 33, /*dio2*/ 32}
+    .nss = 18,
+    .rxtx = LMIC_UNUSED_PIN,
+    .rst = 14,
+    .dio = {26, 33, 32},
 };
+#elif defined(V2)
+const lmic_pinmap lmic_pins = {
+    .nss = 18,
+    .rxtx = LMIC_UNUSED_PIN,
+    .rst = 14,
+    .dio = {26, 35, 34},
+};
+#endif
 
 void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
@@ -65,14 +74,55 @@ void onEvent (ev_t ev) {
       }
       os_setTimedCallback(&sendjob, os_getTime() + sec2osticks(SEND_TIMER), do_send);
       break;
-    case EV_TXSTART:
-      oled_status(" --- TXSTART --- ");
-      Serial.println(F("EV_TXSTART"));
+    case EV_SCAN_TIMEOUT:
+      Serial.println(F("EV_SCAN_TIMEOUT"));
+      break;
+    case EV_BEACON_FOUND:
+      Serial.println(F("EV_BEACON_FOUND"));
+      break;
+    case EV_BEACON_MISSED:
+      Serial.println(F("EV_BEACON_MISSED"));
+      break;
+    case EV_BEACON_TRACKED:
+      Serial.println(F("EV_BEACON_TRACKED"));
+      break;
+    case EV_JOINING:
+      Serial.println(F("EV_JOINING"));
+      break;
+    case EV_JOINED:
+      Serial.println(F("EV_JOINED"));
+      break;
+    case EV_RFU1:
+      Serial.println(F("EV_RFU1"));
+      break;
+    case EV_JOIN_FAILED:
+      Serial.println(F("EV_JOIN_FAILED"));
+      break;
+    case EV_REJOIN_FAILED:
+      Serial.println(F("EV_REJOIN_FAILED"));
+      break;
+      break;
+    case EV_LOST_TSYNC:
+        Serial.println(F("EV_LOST_TSYNC"));
+        break;
+    case EV_RESET:
+      Serial.println(F("EV_RESET"));
+      break;
+    case EV_RXCOMPLETE:
+      // data received in ping slot
+      Serial.println(F("EV_RXCOMPLETE"));
+      break;
+    case EV_LINK_DEAD:
+      Serial.println(F("EV_LINK_DEAD"));
+      break;
+    case EV_LINK_ALIVE:
+      Serial.println(F("EV_LINK_ALIVE"));
+      break;
+     default:
+      Serial.println(F("Unknown event"));
       break;
   }
 }
-
-
 
 void do_send(osjob_t* j) {
   // Check if there is not a current TX/RX job running
@@ -103,9 +153,30 @@ void setup() {
   LMIC_setSession (0x13, LORA_DEVADDR(DEVADDR), NWKSKEY, APPSKEY);
   LMIC_setAdrMode(0);
   LMIC_setClockError(MAX_CLOCK_ERROR * 10 / 100);
-  LMIC_selectSubBand(1);
-  LMIC_setLinkCheckMode(0);
 
+  #if defined(CFG_eu868)
+  LMIC_setupChannel(0, 868100000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
+  LMIC_setupChannel(1, 868300000, DR_RANGE_MAP(DR_SF12, DR_SF7B), BAND_CENTI);      // g-band
+  LMIC_setupChannel(2, 868500000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
+  LMIC_setupChannel(3, 867100000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
+  LMIC_setupChannel(4, 867300000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
+  LMIC_setupChannel(5, 867500000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
+  LMIC_setupChannel(6, 867700000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
+  LMIC_setupChannel(7, 867900000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
+  LMIC_setupChannel(8, 868800000, DR_RANGE_MAP(DR_FSK,  DR_FSK),  BAND_MILLI);      // g2-band
+  #elif defined(CFG_us915)
+  LMIC_selectSubBand(1);
+  #endif
+
+  // Disable link check validation
+  LMIC_setLinkCheckMode(0);
+  
+  // TTN uses SF9 for its RX2 window.
+  LMIC.dn2Dr = DR_SF9;
+    
+  // Set data rate and transmit power for uplink
+  LMIC_setDrTxpow(DR_SF7,14);
+  
   do_send(&sendjob);
 }
 
