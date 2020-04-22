@@ -33,10 +33,17 @@ static uint8_t APPSKEY[16];
 // Pin mapping
 #if defined(V1)
 const lmic_pinmap lmic_pins = {
+<<<<<<< HEAD:esp32-ttnmapper-gps/esp32-ttnmapper-gps.ino
     .nss = 18,
     .rxtx = LMIC_UNUSED_PIN,
     .rst = 14,
     .dio = {26, 33, 32},
+=======
+  .nss = LORA_NSS,
+  .rxtx = LMIC_UNUSED_PIN,
+  .rst = LORA_RST,
+  .dio = {LORA_DIO0, LORA_DIO1, LORA_DIO2}
+>>>>>>> kallisti5/platformio:src/esp32-ttnmapper-gps.ino
 };
 #elif defined(V2)
 const lmic_pinmap lmic_pins = {
